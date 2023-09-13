@@ -1,0 +1,86 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+import string
+
+alphabet = string.ascii_uppercase
+
+def base_graph(graph):
+    noden = int(input("Number of nodes: "))
+    alphabetic = int(input("alphabetic?"))
+    if alphabetic == 1:
+        alphabetic = True
+    else:
+        alphabetic = False   
+    return noden, alphabetic
+
+def add_edges_number(ns):
+    connect = {}
+    for i in range(1, ns + 1):
+        going = True
+        connections = []
+        while going == True: 
+            this_node = input("Add connected node or write 'no'")
+            if this_node == 'no':
+                going = False
+            else:
+                try:
+                    connections.append(int(this_node))
+                except:
+                    print("Couldn't add conneciton")
+        connect[i] = connections
+    return connect
+    
+def add_edges_alpha(ns):
+    connect = {}
+    for i in range(ns):
+        base_node = alphabet[i]
+        going = True
+        connections = []
+        while going == True: 
+            this_node = input(f"Add nodes connected to {base_node} or write 'no'")
+            if this_node == 'no':
+                going = False
+            else:
+                connections.append(str(this_node))
+                print("Couldn't add conneciton")
+        connect[base_node] = connections
+    return connect
+          
+
+
+def main():
+    G = nx.Graph()
+    nodes, alpha = base_graph(G)
+
+    # add nodes
+    for i in range(nodes):
+        if alpha == True:
+            G.add_node(alphabet[i])
+        else:
+            G.add_node(i + 1)
+    connect = {}
+    if alpha == True:
+        connect = add_edges_alpha(nodes)
+    else:
+        connect = add_edges_number(nodes)
+
+    for key, value in connect.items():
+        for i in value:
+            G.add_edge(key, i)
+
+    # # Define the layout (e.g., circular layout)
+    # pos = nx.circular_layout(G)
+    # # Draw nodes and edges
+    # nx.draw_networkx_nodes(G, pos, node_color='lightblue', node_size=500)
+    # nx.draw_networkx_edges(G, pos, edge_color='gray')
+
+    # # Add labels
+    # nx.draw_networkx_labels(G, pos, font_size=12, font_family='sans-serif')
+
+    # # Show the graph
+    # plt.axis('off')  # Hide the axis
+    # plt.show()
+    return G
+
+    
+main()
